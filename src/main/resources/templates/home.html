@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
-    <link rel="stylesheet" th:href='@{/css/output.css}'>
   </head>
 
   <body>
-    <div class="bg-gray-200 w-1/2 p-4 flex flex-col space-y-3 mx-auto items-center m-4">
+    <div id="content" class="bg-gray-200 w-1/2 p-4 flex flex-col space-y-3 mx-auto items-center m-4">
       <h1 class="text-2xl font-bold" th:text="${name}">welcome to home page</h1>
       <p class="text-xl text-gray-700">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit,
@@ -21,7 +19,8 @@
         <button class="px-3 py-3 rounded bg-blue-700 text-white hover:bg-blue-600">Click here</button>
       </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<script>
+    console.log('home page script');
+</script>
   </body>
 </html>

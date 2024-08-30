@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>services</title>
   </head>
   <body>
-    <h1>this is services page</h1>
+    <div id="content">
+      <h1>this is services page</h1>
+      <p>welcome to services page offered by SCM</p>
+       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi recusandae similique incidunt quibusdam, doloremque deleniti totam obcaecati dolore, officia voluptas voluptates ipsa eligendi cupiditate facere quam minima. Reprehenderit voluptas autem ullam beatae tenetur quod ab at neque inventore, aperiam est fugiat aut dolorem ratione! Ducimus, laboriosam maxime provident nostrum inventore, consectetur reprehenderit rem pariatur repellendus neque dolore odit quas at suscipit distinctio, facilis dolorem officia officiis. Aperiam est enim sed ratione quisquam aliquid quidem suscipit beatae consequuntur, nobis minima delectus? Et cum dolorem sequi, accusantium delectus corporis! Temporibus eveniet earum ullam exercitationem obcaecati, ipsum tempore. Doloremque aperiam facilis fugit quidem.
+    </div>
+    <script>
+        console.log('services page script');
+    </script>
   </body>
 </html>
