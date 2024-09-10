@@ -2,9 +2,12 @@ package com.scm.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.User;
@@ -23,8 +26,22 @@ public class UserServiceImpl implements UserService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // setting the default role of the user
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+
     @Override
     public User saveUser(User user) {
+        // before saving the user, we will have to generate user id dynamically
+        String userId = UUID.randomUUID().toString();
+        user.setUserId(userId);
+        // setting the encoded password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // setting the user role
+        user.setRoleList(List.of("ROLE_USER"));
+
         return userRepo.save(user);
     }
 
@@ -72,14 +89,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExistByEmail'");
+        User user = userRepo.findByEmail(email).orElse(null);
+        // return true if there is a user with the given email
+        // return false if there is no user with the given email
+        return user != null;
     }
 
     @Override
     public List<User> getAllUsers() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+        return userRepo.findAll();
     }
 
     // we can implement our methods here

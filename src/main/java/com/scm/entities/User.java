@@ -1,20 +1,19 @@
 package com.scm.entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "user")
 @Table(name = "users")
@@ -23,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class User implements UserDetails {
  
     @Id
     private String userId;
@@ -44,10 +43,11 @@ public class User {
 
     private String phoneNumber;
 
-    private boolean enabled=false;
+    private boolean enabled=true;
     private boolean emailVerified=false;
     private boolean phoneVerified=false;
 
+    @Enumerated(value = EnumType.STRING)
     private Providers provider = Providers.SELF;
     private String providerUserId;
  
@@ -62,5 +62,37 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contact> contacts = new ArrayList<>();
- 
-} 
+
+    // we will need to make it element collection becuase we cannpt sabe the list directly to the database
+    // we will need to save the list as a separate table
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roleList = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // we are not using roles for now
+        Collection<SimpleGrantedAuthority> roles = roleList.stream().map(SimpleGrantedAuthority::new).toList();
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        // our email id is our username for this project
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+}
